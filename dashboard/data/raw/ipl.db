@@ -1,0 +1,96 @@
+from pathlib import Path
+
+import sqlite3
+
+
+
+import pandas as pd
+
+import plotly.express as px
+
+import plotly.graph_objects as go
+
+import streamlit as st
+
+# st.html was added in newer Streamlit releases. Upgrade Streamlit if missing.
+if not hasattr(st, "html"):
+    st.error("This dashboard needs a newer Streamlit version for st.html(). Run: python -m pip install --upgrade streamlit")
+    st.stop()
+
+
+
+# =====================================================
+
+# 1. PAGE CONFIGURATION
+
+# =====================================================
+
+st.set_page_config(
+
+    page_title="IPL Bowling Intelligence",
+
+    page_icon="🏏",
+
+    layout="wide",
+
+    initial_sidebar_state="expanded",
+
+)
+
+
+
+# =====================================================
+
+# 2. INTERACTIVE DESIGN SYSTEM
+
+# =====================================================
+
+with st.sidebar:
+
+    st.markdown("### 🎨 Dashboard Design Lab")
+
+    visual_theme = st.selectbox(
+
+        "Visual identity",
+
+        ["Neon Arena", "Broadcast Gold", "Cyber Violet", "Arctic Blue", "Classic Stadium"],
+
+        index=0,
+
+        help="Switch the dashboard's visual style.",
+
+    )
+
+    motion_mode = st.select_slider(
+
+        "Animation intensity",
+
+        options=["Calm", "Balanced", "Full motion"],
+
+        value="Full motion",
+
+        help="Reduce movement if you prefer a calmer interface.",
+
+    )
+
+    chart_motion = st.toggle("Animated chart transitions", value=True)
+
+    st.caption("Your data and calculations stay the same when you change styles.")
+
+
+
+THEMES = {
+
+    "Neon Arena": {"accent": "#00f5a0", "secondary": "#35d9ff", "glow": "#00f5a044", "hero": "#102a36,#124239,#10233a"},
+
+    "Broadcast Gold": {"accent": "#ffd166", "secondary": "#ff8c42", "glow": "#ffd16644", "hero": "#32251a,#5b3d1c,#1c2938"},
+
+    "Cyber Violet": {"accent": "#c4a1ff", "secondary": "#ff70d6", "glow": "#c4a1ff44", "hero": "#211735,#3b2050,#14253c"},
+
+    "Arctic Blue": {"accent": "#7dd3fc", "secondary": "#a5f3fc", "glow": "#7dd3fc44", "hero": "#10283c,#16465a,#15243c"},
+
+    "Classic Stadium": {"accent": "#8de969", "secondary": "#f4f1de", "glow": "#8de96933", "hero": "#18352b,#234a35,#172c35"},
+
+}
+
+THEME = THEMES[visual_theme]
